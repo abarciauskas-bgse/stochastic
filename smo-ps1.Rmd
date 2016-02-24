@@ -5,7 +5,7 @@ date: 26 February 2016
 output: pdf_document
 ---
 
-## 1. Machine maintenance
+# 1. Machine maintenance
 
 **Suppose that we have a machine that is either running or is broken down. If it runs throughout one week it makes a gross profit of $100. If it fails during the week, the gross profit is zero. If it is running and at the start of the week and we perform preventive maintenance, the probability that it will fail during the week is 0.4. If we do not perform such maintenance, the probability of failure is 0.7. However, maintenance will cost $20. When the machine is broken down at the start of the week, it may either be repaired at a cost of $40, in which case it will fail during the week with probability 0.4, or it may be replaced at a cost of $90 by a new machine that is guaranteed to work properly through its first week of operation. Reformulate the problem within the DP framework, and find the optimal repair-replacement-maintenance policy that maximizes total profit over four weeks, assuming a new machine at the start of the first week.**
 
@@ -17,37 +17,37 @@ output: pdf_document
 
 There are no additional dynamics or constraints for this problem.
 
-Expected profit is always $100 - g(u)$ where $g(u)$ is the exepected cost of decision $u$, (i.e.: $\mathbb{E}_{w}\{G(u,w)\}$). By minimizing expected cost we maximize expected profit.
+Expected profit is always $\$100 - g(u)$ where $g(u)$ is the exepected cost of decision $u$, (i.e.: $\mathbb{E}_{w}\{G(u,w)\}$). By minimizing expected cost we maximize expected profit.
 
 At the beginning of each week, we much pick an optimal strategy given $x_{k}$: the machine is working or broken.
 
-**When the machine is working,** the state at time 0, we have two strategies and their associated expected costs:
+**State 1: when the machine is working,** (the initial state), we have two strategies and their associated expected costs:
 
-1. Perform Maintenence
+**Option 1: Perform Maintenence**
 
 If maintenance is performed, the expected cost is 20 (the cost of maintenance) plus the probability the machine breaks during the week times lost profit:
 
 $J_{\mu_{0}} = 20 + 0.4*100 = 60$
 
-2. Do nothing
+**Option 2: Do nothing**
 
 If maintenance is not performed, the expected cost is the probability the machine breaks down times lost profit.
 
 $J_{\mu_{1}} = 0.7*100 = 70$
 
-*When the machine is working, performing maintenance minimizes expected cost*
+*Strategy when the machine is working, performing maintenance minimizes expected cost.*
 
-**When the machine is broken,** there are three strategies:
+**State 2: when the machine is broken,** there are three strategies:
 
-1. Buy a new machine:
+**Option 1: Buy a new machine.**
 
 $J_{\mu_{0}} = 90$
 
-2. Repair the machine:
+**Option 2: Repair the machine.**
 
 $J_{\mu_{1}} = 40 + 0.4*100 = 80$
 
-3. Do nothing:
+**Option 3: Do nothing.**
 
 $J_{\mu_{2}} = 100$
 
@@ -68,7 +68,7 @@ $\mu_{k}(broken) = \text{ repair broken machine}$
 1. $J^{*}(x_{0}) = min_{\pi}J_{\pi}(x_{0}) =  \mu_{k}(working)$
 2. From week $1,..,4$, act according to policies $\pi = {\mu(broken), \mu(working)}$, as the policies are detailed above.
 
-## 2. Discounted Cost
+# 2. Discounted Cost
 
 **In the framework of the basic problem, consider the case where the cost is of the form:**
 
@@ -76,7 +76,7 @@ $$\mathbb{E}_{w_{k}}\bigg\{ \alpha^{N}g_{N}(x_{N}) + \sum_{k=0}^{N-1} \alpha^{k}
 
 **where $\alpha \in (0,1)$ is a discount factor. Develop a DP-like algorithm for this problem.**
 
-$$J_{n}(x_{n}) = \alpha^{N}g_{N}(x_{N}) <=> J_{N}(x_{N})\alpha^{-N} = g_{N}(x_{N})$$
+$$J_{N}(x_{N}) = \alpha^{N}g_{N}(x_{N}) <=> J_{N}(x_{N})\alpha^{-N} = g_{N}(x_{N})$$
 
 $$J_{k}(x_{k}) = \min\limits_{u_{k}} \mathbb{E}_{w_{k}} \bigg\{ \alpha^{k} g_{k}(x_{k},u_{k},w_{k}) + J_{k+1}(f_{k}(x_{k}, u_{k},w_{k})\bigg\}$$
 
@@ -86,11 +86,11 @@ $$J_{k}(x_{k})\alpha^{-k} = \min\limits_{u_{k}} \mathbb{E}_{w_{k}} \bigg\{ g_{k}
 
 Let $\phi_{k} := J_{k}x_{k}\alpha^{-k}$, then for the DP algorithm:
 
-**Initial step:** $\phi_{N}(x_{N}) = g_{N}(x_{N}$
+**Initial step:** $\phi_{N}(x_{N}) = g_{N}(x_{N})$
 
 **Recursive function:** $\phi_{k}(x_{k}) = \min\limits_{u_{k}} \mathbb{E}_{w_{k}} \bigg\{ g_{k}(x_{k},u_{k},w_{k}) + \alpha \phi_{k+1} (f_{k}(x_{k}, u_{k}, w_{k})) \bigg\}$
 
-## 3. Multiplicative cost
+# 3. Multiplicative cost
 
 **In the framework of the basic problem, consider the case where the cost has the multiplicative form:**
 
@@ -104,13 +104,13 @@ The primitives of the problem are the same as for the generic DP framework:
 
 The DP algorithm proceeds as follows:
 
-1. Start with:
+**Step 1. Start with:**
 
 $J_{N}(x_{N})= g_{N}(x_{N})$
 
-2. Work backwards in time:
+**Step 2. Work backwards in time**
 
-At time $i$, select the $u_{k}$ which minimizes the expected cost
+At time $i$, select the $u_{k}$ which minimizes the expected cost:
 
 $$J_{k}(x_{k})= \min\limits_{{u_{k} \in U_{k}}} \mathbb{E}_{w_{k}} \bigg\{ g_{N}(x_{N}) \prod_{k=i}^{N-1} g_{k}(x_{k}, \mu_{k}(x_{k}), w_{k}) \bigg\}$$
 
@@ -120,7 +120,7 @@ $$J^{*}_{k}(x_{k}) = J_{k}(x_{k})$$
 
 The policy which minimizes the expected cost is equivalent to a shortest path problem and thus satisfies the principal of optimality: the policies which optimize the tail subproblems are necessarily also a part of the optimal policy. Minimizing cost working backwards solves for the minimal cost.
 
-## 4. Knapsack Problem
+# 4. Knapsack Problem
 
 
 **Assume that we have a vessel whose maximum weight capacity is $Z$ and whose cargo is to consist of different quantities of $N$ different items. Let $v_{i}$ denote the value of the ith type of item, $w_{i}$ the weight of the $i^{th}$ type of item, and $x_{i}$ the number of items of type $i$ that are loaded in the vessel. The problem is to find the most valuable cargo, i.e., to maximize $\Sigma^{N}_{i=1}x_{i}v_{i}$ subject to the constraints $\Sigma^{N}_{i=1}x_{i}w_{i} \leq Z$ and $x_{i} \in N$. Reformulate the problem within the DP framework.**
@@ -145,20 +145,19 @@ Filling up the remaining space with the last item.
 $$J_{i}(x_{i}) = \min\limits_{u_{i}}\bigg\{ g_{i}(x_{i},u_{i}) + J_{i+1}(f_{i}(x_{i}, u_{i}))\bigg\}$$
 
 
-## 5. Traveling Repairman Problem...
+# 5. Traveling Repairman Problem.
+
+**A repairman must service $N$ sites, which are located along a line and are sequentially numbered $1,2,...,N$. The repairman starts at a given site $s$ with $1 < s < N$, and is constrained to service only sites that are adjacent to the ones serviced so far, i.e., if he has already serviced sites $i, i + 1, ... , j$, then he may service only site $i-1$ (assuming $1 < i$) or site $j + 1$ (assuming $j < N$). There is a waiting cost of $c_{i}$ for each time period that site $i$ has remained unserviced and there is a travel cost $t_{ij}$ for servicing site $j$ right after site $i$. Reformulate the problem within the DP framework.**
 
 
-**A repairman must service $N$ sites, which are located along a line and are sequentially numbered $1,2,...,N$. The repairman starts at a given site $s$ with $1 < s < N$, and is constrained to service only sites that are adjacent to the ones serviced so far, i.e., if he has already serviced sites $i, i + 1, ... , j$, then he may service only site $i-1$ (assuming $1 < i$) or site $j + 1$ (assuming $j < N$). There is a waiting cost of ci for each time period that site i has remained unserviced and there is a travel cost $t_{ij}$ for servicing site $j$ right after site $i$. Reformulate the problem within the DP framework.**
-
-
-* *states:* $x_{k}$ Sites served so var
+* *states:* $x_{k}$ Sites served so far
 * *controls:* $u_{k}$ Site to serve next
 
 $$u_{k}(x_{k}) \in \big\{ s_{i-1}, s_{j+1}\big\}, x_{k} = \big\{ s_{i}, s_{i+1}, ..., s_{j}\big\}$$
 
-* *uncertainty:* $w_{k}$ n/a
+* *uncertainty:* $w_{k}$ none
 
-* *dynamics:* $f(x_{k},u_{k}) = x_{k} \cup \big\{u_{k}(x_{k})\big\} = x_{k+1}$
+* *dynamics:* $f(x_{k},u_{k}) = x_{k} + u_{k} = x_{k+1}$. In words: $x_{k+1}$ is adjacent to $x_{k}$ and the control $u_{k}$ moves the repairman to $x_{k+1}$
 
 * *cost:*
 
