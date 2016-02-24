@@ -125,7 +125,7 @@ The policy which minimizes the expected cost is equivalent to a shortest path pr
 
 **Assume that we have a vessel whose maximum weight capacity is $Z$ and whose cargo is to consist of different quantities of $N$ different items. Let $v_{i}$ denote the value of the ith type of item, $w_{i}$ the weight of the $i^{th}$ type of item, and $x_{i}$ the number of items of type $i$ that are loaded in the vessel. The problem is to find the most valuable cargo, i.e., to maximize $\Sigma^{N}_{i=1}x_{i}v_{i}$ subject to the constraints $\Sigma^{N}_{i=1}x_{i}w_{i} \leq Z$ and $x_{i} \in N$. Reformulate the problem within the DP framework.**
 
-* *states:* $z_{i}$ weight left after adding item $i$
+* *states:* $z_{i}$ weight left after adding item $i$ and previous items stored and amount
 * *controls:* $u_{i}$ adding a weight $x_{i}w_{i}$
 
 $$u_{i}(x_{i}) \in \{ 0 \leq u_{i} \geq z_{i}, z_{i} \in [0, Z] \}$$
@@ -139,7 +139,9 @@ $$g_{i}(x_{i},u_{i}) = \frac{(z_{i} - x_{i}w_{i})}{w_{i}} v_{i}$$
 The cost of not filling up the remaining space with that item.
 
 **DP algorithm**
-$$g_{N}(x_{N}) = J_{N}(x_{N})$$
+$$g_{N}(x_{N}) = J_{N}(x_{N}) = \frac{(z_{N} - x_{N}w_{N})}{w_{N}} v_{N}$$
+Filling up the remaining space with the last item.
+
 $$J_{i}(x_{i}) = \min\limits_{u_{i}}\bigg\{ g_{i}(x_{i},u_{i}) + J_{i+1}(f_{i}(x_{i}, u_{i}))\bigg\}$$
 
 
