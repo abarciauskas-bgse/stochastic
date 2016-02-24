@@ -1,7 +1,7 @@
 ---
 title: Stochastic Modeling and Optimization Problemset 1
 author: Aimee Barciauskas, Andreas Lloyd, Francis Thomas Moynihan IV, and Seda Yilmaz
-date: 26 February 2016
+date: 25 February 2016
 output: pdf_document
 ---
 
@@ -147,7 +147,7 @@ $$u_{k}(x_{k}) \in \big\{ s_{i-1}, s_{j+1}\big\}, x_{k} = \big\{ s_{i}, s_{i+1},
 
 * *uncertainty:* $w_{k}$ none
 
-* *dynamics:* $f(x_{k},u_{k}) = x_{k} + u_{k} = x_{k+1}$.
+* *dynamics:* $f(x_{k},u_{k}) = x_{k} \cup \big\{u_{k}(x_{k})\big\}$
 
 * *cost:*
 
@@ -155,7 +155,7 @@ $$g_{k}(x_{k},u_{k}) = t_{k} + \sum^{U_{k}} c_{i}$$
 
 where $t_{k}$ is travelling cost from $u_{k-1}(x_{k-1})$ to $u_{k}(x_{k})$ and $c_{i}$ is the waiting cost of each site not yet visited.
 
-$S$ is the set of all sites and $U_{k} = S - \big\{ x_{k}\big\}$, e.g. we can chose from all sites not yet visited.
+$S$ is the set of all sites and $U_{k} = S - x_{k}$.
 
 * *constraints:* Next site to serve must be adjacient to the sites served so far.
 
