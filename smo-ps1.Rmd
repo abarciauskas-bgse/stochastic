@@ -157,11 +157,11 @@ $$u_{k}(x_{k}) \in \big\{ s_{i-1}, s_{j+1}\big\}, x_{k} = \big\{ s_{i}, s_{i+1},
 
 * *uncertainty:* $w_{k}$ none
 
-* *dynamics:* $f(x_{k},u_{k}) = x_{k} + u_{k} = x_{k+1}$. In words: $x_{k+1}$ is adjacent to $x_{k}$ and the control $u_{k}$ moves the repairman to $x_{k+1}$
+* *dynamics:* $f(x_{k},u_{k}) = x_{k} + u_{k} = x_{k+1}$.
 
 * *cost:*
 
-$$g_{k}(x_{k},u_{k}) = t_{k} + \sum_{i=0}^{U_{k}} c_{i}$$
+$$g_{k}(x_{k},u_{k}) = t_{k} + \sum^{U_{k}} c_{i}$$
 
 where $t_{k}$ is travelling cost from $u_{k-1}(x_{k-1})$ to $u_{k}(x_{k})$ and $c_{i}$ is the waiting cost of each site not yet visited.
 
