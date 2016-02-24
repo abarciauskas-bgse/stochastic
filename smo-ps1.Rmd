@@ -112,11 +112,11 @@ $J_{N}(x_{N})= g_{N}(x_{N})$
 
 At time $i$, select the $u_{k}$ which minimizes the expected cost
 
-$$J_{k}(x_{k})= min_{u_{k} \in U_{k}} \mathbb{E}_{w_{k}} g_{N}(x_{N}) + \prod_{k=i}^{N-1} g_{k}(x_{k}, \mu_{k}(x_{k}), w_{k})$$
+$$J_{k}(x_{k})= \min\limits_{{u_{k} \in U_{k}}} \mathbb{E}_{w_{k}} \bigg\{ g_{N}(x_{N}) \prod_{k=i}^{N-1} g_{k}(x_{k}, \mu_{k}(x_{k}), w_{k}) \bigg\}$$
 
 And the optimal policy becomes the $\mu^{*}_{i},...,\mu^{*}_{N-1}$ which result from this optimizes.
 
-$$J^{*}_{k}(x_{k}) = J_{k}(x_{k})$$ (as shown in slide 7 of [Lecture 2 Slides](https://app.box.com/files/0/f/6614855809/1/f_53828711529)*)
+$$J^{*}_{k}(x_{k}) = J_{k}(x_{k})$$
 
 The policy which minimizes the expected cost is equivalent to a shortest path problem and thus satisfies the principal of optimality: the policies which optimize the tail subproblems are necessarily also a part of the optimal policy. Minimizing cost working backwards solves for the minimal cost.
 
