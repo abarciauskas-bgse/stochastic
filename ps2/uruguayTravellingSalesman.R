@@ -1,8 +1,8 @@
-# setwd('~/Box Sync/abarciausksas/myfiles/stochastic/')
+# setwd('~/Box Sync/abarciausksas/myfiles/stochastic/ps2')
 
 source('travellingSalesman.R')
 cities <- as.matrix(read.csv('uruguay.tsv', sep = ' ', header = FALSE))
-path <- travelling.salesman(cities)
+system.time(path <- travelling.salesman(cities))
 
 # references:
 # https://en.wikipedia.org/wiki/Held–Karp_algorithm
