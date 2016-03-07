@@ -1,0 +1,103 @@
+---
+title: Stochastic Modeling and Optimization Problemset 3
+author: Aimee Barciauskas, Andreas Lloyd, Francis Thomas Moynihan IV, and Seda Yilmaz
+date: 6 March 2016
+output: pdf_document
+---
+
+# Problem 1
+
+Problem variables
+
+$$P_{l} = \text{ probability of large demand}$$
+$$P_{s} = \text{ probability of small demand}$$
+$$x_{k} = \text{ current inventory level}$$
+$$w_{k} = \text { demand drawn from P_{l} or P_{s}}$$
+$$q = \text{ apriori probability of large demand}$$
+
+In the standard inventory control problem, for every overrage or underage in stock given demand, there are associated holding and shortage costs:
+
+$$r(x) = p(max(0,-x)) + h(max(0,x))$$
+
+If there is a non-negative $x$, $h$ denotes the unit holding cost. If there $x$ is negative, there is an opportunity cost of $p$ per unit of demand not met.
+
+The minimized cost function is:
+
+$$min_{u \geq 0} \Big\{cu + \underset{w}\mathbb{E}\{p max(0, w - x - u) + h max(0, x + u - w) \| y \}\Big\}$$
+
+where $c$ is the cost of ordering level $u$. E.g. it is optimized by the $u$ minimizing the holding cost plus the overrage cost and $y$ is the indicator in $\{1,2\}$ indicating the realization of large or small demand.
+
+*Part 1 Solution*
+
+Let $y_{i} \in \{1,2\}$ denote the realization of large or small demand and $D^{i}$ the level of demand. The single-period optimal choice is the same for either large or small demand:
+
+$$
+\mu^{*}(x,y) = = \begin{cases}
+  D^{i}-x, & \text{if } y = i \text{ and } x < D^{i}, \\
+  0, & \text{otherwise}.
+\end{cases}
+$$
+
+*Part 2 Solution*
+
+The augmented system for the multi-period problem is:
+
+$$x_{k+1} = x_{k} + u_{k} - w_{k}$$
+$$y_{k+1} = \psi_{k}$$
+
+Where $\psi_{k}$$ takes on values $1$ and $2$ indicating a realization of demand from $P_{l}$ and $P_{s}$ respectively and taking on value $1$ with probability $q$ and $2$ with probability $1-q$
+
+The DP algorithm is:
+
+1. Terminal cost is:
+
+$$J_{N}(x_{N}, y_{N}) = 0$$
+
+2. Choose the $u_{k}$ minimizing the cost function at time $k$ given by:
+
+$$costfunction = cu_{k} + \{p max(0, w_{k} - x_{k} - u_{k}) + h max(0, x_{k} + u_{k} - w_{k})\}$$
+$$J_{k}(x_{k}, y_{k}) = min_{u \geq 0} \underset{w_{k}}\mathbb{E} \Big\{ costfunction + qJ_{k+1}(x_{k} + u_{k} − w_{k}, 1) + (1 − q)J_{k+1}(x_{k} + u_{k} - w_{k}, 2)| y_{k}\Big\}$$
+
+$$
+\mu_{k}^{*}(x_{k},y_{k}) = = \begin{cases}
+  D_{k}^{i}-x_{k}, & \text{if } y_{k} = i, x_{k} < D_{k}^{i}, \\
+  0, & \text{otherwise}.
+\end{cases}
+$$
+
+
+# Problem 5
+
+$$p_{i}: \text{probability of answering question $i$ correctly}$$
+$$r_{i}: \text{reward for answering question $i$ correctly}$$
+$$F_{i}: \text{cost for answering question $i$ incorrectly}$$
+
+The expected value of question $i$:
+
+$$R_{i} = \mathbb{E}[q_{i}] = p_{i}R_{i} - (1-p_{i})F_{i}$$
+
+*Part 1 Solution*
+
+Claim the optimal ordering of the set of questions is $L$ and questions $i$ and $j$ are the $k^{th}$ and $(k+1)^{st}$ questions:
+
+$$L = \bigg\{i_{0}, ..., i_{k-1}, i, j, i_{k+2}, ..., i_{N-1}\bigg\}$$
+
+If we consider the list with $i$ and $j$ interchanged:
+
+$$L' = \bigg\{i_{0}, ..., i_{k-1}, j, i, i_{k+2}, ..., i_{N-1}\bigg\}$$
+
+The expectation of the reward for $L$ is greater than $L'$ by definition, so it follows that:
+
+$$p_{i}R_{i} - (1-p_{i})F_{i}/(1 − p_{i}) \geq p_{j}R_{j} - (1-p_{j})F_{j}/(1 − p_{j})$$
+
+*Part 2 Solution*
+
+If there is a no cost option to stop answering questions, the contestant will stop answering questions whenever the expected value of answering the next question is negative.
+
+The game stops at period $k-1$, with $k$ satisfying:
+
+$$p_{k}R_{k} \leq (1-p_{k})F_{k}$$
+
+That is, the game stops whenever the expected value of answering the next question becomes negative.
+
+
