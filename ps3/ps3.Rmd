@@ -12,7 +12,7 @@ Problem variables
 $$P_{l} = \text{ probability of large demand}$$
 $$P_{s} = \text{ probability of small demand}$$
 $$x_{k} = \text{ current inventory level}$$
-$$w_{k} = \text { demand drawn from P_{l} or P_{s}}$$
+$$w_{k} = \text{ demand drawn from $P_{l}$ or $P_{s}$}$$
 $$q = \text{ apriori probability of large demand}$$
 
 In the standard inventory control problem, for every overrage or underage in stock given demand, there are associated holding and shortage costs:
@@ -23,7 +23,7 @@ If there is a non-negative $x$, $h$ denotes the unit holding cost. If there $x$ 
 
 The minimized cost function is:
 
-$$min_{u \geq 0} \Big\{cu + \underset{w}\mathbb{E}\{p max(0, w - x - u) + h max(0, x + u - w) \| y \}\Big\}$$
+$$min_{u \geq 0} \Big\{cu + \underset{w}{\mathbb{E}}\{p max(0, w - x - u) + h max(0, x + u - w) \| y \}\Big\}$$
 
 where $c$ is the cost of ordering level $u$. E.g. it is optimized by the $u$ minimizing the holding cost plus the overrage cost and $y$ is the indicator in $\{1,2\}$ indicating the realization of large or small demand.
 
@@ -56,7 +56,7 @@ $$J_{N}(x_{N}, y_{N}) = 0$$
 2. Choose the $u_{k}$ minimizing the cost function at time $k$ given by:
 
 $$costfunction = cu_{k} + \{p max(0, w_{k} - x_{k} - u_{k}) + h max(0, x_{k} + u_{k} - w_{k})\}$$
-$$J_{k}(x_{k}, y_{k}) = min_{u \geq 0} \underset{w_{k}}\mathbb{E} \Big\{ costfunction + qJ_{k+1}(x_{k} + u_{k} − w_{k}, 1) + (1 − q)J_{k+1}(x_{k} + u_{k} - w_{k}, 2)| y_{k}\Big\}$$
+$$J_{k}(x_{k}, y_{k}) = min_{u \geq 0} \underset{w_{k}}\{\mathbb{E}\} \Big\{ costfunction + qJ_{k+1}(x_{k} + u_{k} - w_{k}, 1) + (1 - q)J_{k+1}(x_{k} + u_{k} - w_{k}, 2)| y_{k}\Big\}$$
 
 $$
 \mu_{k}^{*}(x_{k},y_{k}) = = \begin{cases}
@@ -88,7 +88,7 @@ $$L' = \bigg\{i_{0}, ..., i_{k-1}, j, i, i_{k+2}, ..., i_{N-1}\bigg\}$$
 
 The expectation of the reward for $L$ is greater than $L'$ by definition, so it follows that:
 
-$$p_{i}R_{i} - (1-p_{i})F_{i}/(1 − p_{i}) \geq p_{j}R_{j} - (1-p_{j})F_{j}/(1 − p_{j})$$
+$$p_{i}R_{i} - (1-p_{i})F_{i}/(1 - p_{i}) \geq p_{j}R_{j} - (1-p_{j})F_{j}/(1 - p_{j})$$
 
 *Part 2 Solution*
 
@@ -96,7 +96,7 @@ If there is a no cost option to stop answering questions, the contestant will st
 
 The game stops at period $k-1$, with $k$ satisfying:
 
-$$p_{k}R_{k} \leq (1-p_{k})F_{k}$$
+$$p_{k}R_{k} < (1-p_{k})F_{k}$$
 
 That is, the game stops whenever the expected value of answering the next question becomes negative.
 
