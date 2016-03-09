@@ -32,7 +32,7 @@ where $c$ is the cost of ordering level $u$. E.g. it is optimized by the $u$ min
 Let $y_{i} \in \{1,2\}$ denote the realization of large or small demand and $D^{i}$ the level of demand. The single-period optimal choice is the same for either large or small demand:
 
 $$
-\mu^{*}(x,y) = = \begin{cases}
+\mu^{*}(x,y) = \begin{cases}
   D^{i}-x, & \text{if } y = i \text{ and } x < D^{i}, \\
   0, & \text{otherwise}.
 \end{cases}
@@ -59,11 +59,53 @@ $$costfunction = cu_{k} + \{p max(0, w_{k} - x_{k} - u_{k}) + h max(0, x_{k} + u
 $$J_{k}(x_{k}, y_{k}) = min_{u \geq 0} \underset{w_{k}}\{\mathbb{E}\} \Big\{ costfunction + qJ_{k+1}(x_{k} + u_{k} - w_{k}, 1) + (1 - q)J_{k+1}(x_{k} + u_{k} - w_{k}, 2)| y_{k}\Big\}$$
 
 $$
-\mu_{k}^{*}(x_{k},y_{k}) = = \begin{cases}
+\mu_{k}^{*}(x_{k},y_{k}) = \begin{cases}
   D_{k}^{i}-x_{k}, & \text{if } y_{k} = i, x_{k} < D_{k}^{i}, \\
   0, & \text{otherwise}.
 \end{cases}
 $$
+
+# Problem 2
+
+a)
+First we consider demands as correlated $w_{k} = \epsilon_{k} - \gamma\epsilon_{k-1}$. Considering the relation given in the problem, the values of $\epsilon_{k-1}$ can be known apriori, as long as $\epsilon_{-1}$ is provided. This means that we can redefine the state variable as $z_{k} = x_{k} + \gamma\epsilon_{k-1}$. To show that this converts the problem to an uncorrelated one, consider the dynamics for inventory control
+$$x_{k+1} = x_{k} + u_{k} - w_{k},$$
+which we can now expand and make a change of variable
+$$x_{k+1} = x_{k} + \gamma\epsilon_{k-1} + u_{k} - \epsilon_{k} = z_{k} + u_{k} - \epsilon_{k}.$$
+
+And so now the problem is an uncorrelated one.
+
+b)
+Now considering a one period delay, this is essentially the same problem except instead of $u_{k}$, we have $u_{k-1}$. Then, continuing on from part (a), we have
+$$x_{k+1} = z_{k} + u_{k-1} - \epsilon_{k}.$$
+Again we can make the change in variable to $y_{k} = z_{k} + u_{k-1}$, so that we are left with
+$$x_{k+1} = y_{k} - \epsilon_{k}$$,
+and again, we have the same result.
+
+# Problem 3
+
+If we consider the case of covering each demand from a separate inventory repository, with optimal order quantity $Q^{*}$, then the optimal amount for a centralised inventory is $Q_{p}^{*}=\Sigma Q_{i}^{*}$. This is true because all locations are independent and follow the same distribution. The ideal order amount is equal to the expected demand, $Q^{*} = E(D)$, so the optimal amount to order is $\Sigma E(D_{i}) = E(\Sigma D_{i})$. Then, using the distribution of the demands,
+$$E(\Sigma D_{i}) = E(\sqrt{n}D_{1} + \mu(n - \sqrt{n})) = \sqrt{n}E(D_{1}) + \mu(n - \sqrt{n}) = \sqrt{n}Q^{*} + \mu(n - \sqrt{n})$$
+
+For the cost of the centralised system, we have 
+$$C_{p} = E[h(Q_{p}^{*} - \Sigma D_{i})^{+} + p(\Sigma D_{i} - Q_{p}^{*})^{+}]
+= E[h(\sqrt{n}Q^{*})^{+} + p(\sqrt{n}Q^{*})^{+}] = \sqrt{n}E[h(Q^{*})^{+} + p(Q^{*})^{+}] = \sqrt{n}C$$
+
+where $C$ is the cost of an individual repository and we have used the relation for the sum of demands as before. Therefore, $\frac{nC}{C_{p}} = \frac{nC}{\sqrt{n}C} = \sqrt{n}C$, as desired.
+
+# Problem 4
+
+* $x_{k}$ the state is the maximum offer received so far,
+* $u_{k}$ the control of the problem is to accept or not accept offer at period $k$,
+* $w_{k}$ offer at period $k$ from set $w_{k}$ which is from the set of $n$ possible offers $w_{j} \in \{ w_{1}, ..., w_{n}\}$ each having probability from the set $p_{j} \in \{ p_{1}, ..., p_{n}\}$
+
+The optimal policy is to "stop" e.g. to accept the offer $x_{k}$ whenever $x_{k}$ satisifies the condition:
+
+$$h(x_{k}) = -c + \sum_{i=1}^{n} p_{i}max(x_{k},w_{i})$$
+
+In words: we stop whenever the probability of recovering the maintenance cost from a higher offer is greater than the current maximum. The one-step stopping set is:
+
+$$T_{N-1} = \bigg\{ x | x \geq -c + \sum_{i=1}^{n}p_{i}max(x, w_{i}) \bigg\}$$
 
 
 # Problem 5
@@ -82,13 +124,19 @@ Claim the optimal ordering of the set of questions is $L$ and questions $i$ and 
 
 $$L = \bigg\{i_{0}, ..., i_{k-1}, i, j, i_{k+2}, ..., i_{N-1}\bigg\}$$
 
+Than the expectation of the reward of L is given by the expectation of the set $\{i_{0}, ..., i_{k-1}\}$ plus the joint probability of getting all $i_{0}, ..., i$ questions correct times the expected reward of the $i-th$ question plus the joint probability of getting all $i_{0}, ..., j$ questions correct times the expected reward of the $j-th$ question plus the joint probabilities for $k+2$ to $N-1$. E.g.:
+
+$$\mathbb{L} = \mathbb{E}\big\{ \text{ reward of $\{i_{0}, ..., i_{k-1}\}$} \big\} $$
+$$\text{  }+ p_{i_{0}} ... p_{i_{k-1}} \bigg\{p_{i}R_{i} - (1-p_{i})F_{i} + p_{i}(p_{j}R_{j} - (1-p_{j})F_{j}) \bigg\}$$
+$$\text{  }+ p_{i_{0}} ... p_{i_{k-1}}p_{i}p_{j}\mathbb{E}\big\{ \text{ reward of} \{i_{k+2},...,i_{N-1}\} \big\}$$
+
 If we consider the list with $i$ and $j$ interchanged:
 
 $$L' = \bigg\{i_{0}, ..., i_{k-1}, j, i, i_{k+2}, ..., i_{N-1}\bigg\}$$
 
 The expectation of the reward for $L$ is greater than $L'$ by definition, so it follows that:
 
-$$p_{i}R_{i} - (1-p_{i})F_{i}/(1 - p_{i}) \geq p_{j}R_{j} - (1-p_{j})F_{j}/(1 - p_{j})$$
+$$\frac{p_{i}R_{i} - (1-p_{i})F_{i}}{(1 - p_{i})} \geq \frac{p_{j}R_{j} - (1-p_{j})F_{j}}{(1 - p_{j})}$$
 
 *Part 2 Solution*
 
