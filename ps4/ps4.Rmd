@@ -1,0 +1,8 @@
+
+# Problem 1
+
+Show $\delta J_{k+1}(x_{u}) \leq \delta J_{k}(x_{k})$ given $\delta J_{k}(x_{k} + 1 \leq \delta J_{k}(x_{k}$
+
+$$J_{k}(x_{k} + 1) - J_{k}(x_{k}) \leq \delta J_{k}(x_{m}) \text{ definition of $\delta$}$$
+
+$$r_{k}(d^{*}) - d^{*}\delta J_{k+1}(x_{k} + 1) + J_{k+1}(x_{k} + 1) - (r_{k}(d^{*} \delta J_{k+1}(x_{u}) - J_{k+1}(x_{u}))) \leq \delta J_{k}(x_{u})$$
