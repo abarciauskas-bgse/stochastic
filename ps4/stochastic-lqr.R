@@ -1,20 +1,21 @@
 if (!require('assertthat')) install.packages('asserthat')
 if (!require('matrixcalc')) install.packages('matrixcalc')
 if (!require('mvtnorm')) install.packages('mvtnorm')
+if (!require('Matrix')) install.packages('Matrix')
 
 # Initial values for x, A, B, C and R
 N = 101 # go to 101 since R's indexing starts at 1
 # the first element of everything is associted with t = 0, and the last element (the 101th element) with t = 100
 x0 = c(1,1)
-A = matrix(c(1,2,3,4), nrow = 2, ncol = 2)
-B = matrix(c(3,4,5,6), nrow = 2, ncol = 2)
+A = matrix(c(0,1,2,0), nrow = 2, ncol = 2)
+B = matrix(c(2,0,5,3), nrow = 2, ncol = 2)
 are_equal(rankMatrix(cbind(A, A%*%B))[1], max(nrow(A), ncol(A)))
-C = c(2,3)
+C = c(2,1)
 Q = C %*% t(C)
-R = diag(x = c(1,3))
+R = diag(x = c(2,3))
 assert_that(is.positive.definite(R))
 # 100 disturbances
-ws = rmvnorm(N-1, mean = c(0,0), sigma = diag(x = c(1,2)))
+ws = rmvnorm(N-1, mean = c(0,0), sigma = diag(x = c(0.1,0.2)))
 
 # Initialize stores for x, L and K
 x.mat <- matrix(NA, nrow = N, ncol = length(x0))
@@ -32,8 +33,7 @@ K.list[[N]] <- Q
 # R indices 100 to 1
 for (t in (N-1):1) {
   K.tplus1 <- K.list[t+1][[1]]
-  library(MASS) # FIXME
-  K.list[[t]] <- t(A) %*% (ginv(K.tplus1 - K.tplus1%*%B%*%(R + t(B)%*%K.tplus1%*%B)) %*% t(B) %*% K.tplus1) %*% A + Q
+  K.list[[t]] <- t(A) %*% (K.tplus1 - K.tplus1%*%B%*% solve(R + t(B)%*%K.tplus1%*%B) %*% t(B) %*% K.tplus1) %*% A + Q
   L.list[[t]] <- -solve(R + t(B)%*%K.tplus1%*%B) %*% t(B) %*% K.tplus1 %*% A
 }
 
