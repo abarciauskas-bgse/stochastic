@@ -1,8 +1,72 @@
+---
+title: Stochastic Modeling and Optimization Problemset 3
+author: Aimee Barciauskas, Andreas Lloyd, Francis Thomas Moynihan IV, and Seda Yilmaz
+date: 17 March 2016
+output: pdf_document
+---
 
-# Problem 1
+# Problem 2
 
-Show $\delta J_{k+1}(x_{u}) \leq \delta J_{k}(x_{k})$ given $\delta J_{k}(x_{k} + 1 \leq \delta J_{k}(x_{k}$
+Given definitions:
 
-$$J_{k}(x_{k} + 1) - J_{k}(x_{k}) \leq \delta J_{k}(x_{m}) \text{ definition of $\delta$}$$
+* $x_{k}$ the state vector,
+* $u_{k}$ the control vector, and
+* $w_{k}$ is the disturbance vector
 
-$$r_{k}(d^{*}) - d^{*}\delta J_{k+1}(x_{k} + 1) + J_{k+1}(x_{k} + 1) - (r_{k}(d^{*} \delta J_{k+1}(x_{u}) - J_{k+1}(x_{u}))) \leq \delta J_{k}(x_{u})$$
+In order for the terminal state $x_{N} = f_{N-1}(x_{N-1}, u_{N-1}) + g_{N-1}(w_{N-1})$ to be in the target set $X_{N}$, it is necessary and sufficient for $f_{N-1}(x_{N-1}, u_{N-1})$ belong to the effective target set $E_{N}$ as defined below.
+
+*Part a*
+
+Given a prescribed target set $X_{N} \in \mathbb{R}^{N}$, we recursively solve for $x_{k}$ in this target set. To do this, we can define the effective target set:
+
+$$E_{N} = \bigg\{z \in \mathbb{R}^{n} : z + g_{N-1}(w_{N-1}) \in X_{N} \forall w_{N-1} \in W_{N-1} \bigg\}$$
+
+which will only be defined given the updated target set $T_{N-1}$, defined by:
+
+$$T_{N-1} = \bigg\{ z \in \mathbb{R}^{n} : f_{N-1}(z, u_{N-1}) \in E_{N} \text{ for some } u_{N-1} \in U_{N-1} \bigg\}$$
+
+The DP recursion becomes:
+
+$$E_{k+1} = \bigg\{z \in \mathbb{R}^{n} : z + g_{k}(w_{k}) \in T_{k+1} \forall w_{k} \in W_{k} \bigg\}$$
+
+Which is used to update the target set:
+
+$$T_{k} = \bigg\{ z \in \mathbb{R}^{n} : f_{k}(z, u_{k}) \in E_{k+1}\bigg\}$$
+
+$$T_{N} = X_{N}$$
+
+What follows is that for $X_{N}$ to be reachable from set $X_{k}$ of $x_{k}$ if and only if $X_{k} \in T_{k}$
+
+*Part b*
+
+$X_{k+1}$ is defined as before but must be contained in $X_{k}$ for all $w_{k} \in W_{k}$
+
+The target tube is defined as:
+
+$$\bigg\{ \big( X_{k}, k \big), k = 1, ..., N \bigg\}$$
+
+If we consider all sets of $X_{k}$ but $X_{N}$ to be in $\mathbb{R}^{n}$, the problem is the same as stated in part 1 with the additional requirement that all $x_{k} \in X_{k}$
+
+To initialize the recursion, define the modeified target set:
+
+$$X_{N-1}^{*} = T_{N-1} \cap X_{N-1}$$
+
+it is necessary and sufficient that
+
+$$x_{N-1} \in X_{N-1}^{*} \text{ and } T_{N-1}$$
+
+e.g. $x_{N-1}$ is from the modified target set.
+
+The DP recursion is:
+
+$$E_{k+1}^{*} = \bigg\{z \in \mathbb{R}^{n} : z + g_{k}(w_{k}) \in X_{k+1}^{*} \forall w_{k} \in W_{k} \bigg\}$$
+
+$$T_{k}^{*} = \bigg\{ z \in \mathbb{R}^{n} : f_{k}(z, u_{k}) \in E_{k+1} \text{ for some } u_{k} \in U_{k} \bigg\}$$
+
+$$X_{k}^{*} = T_{k}^{*} \cap X_{k}$$
+
+$$X_{N}^{*} = X_{N}$$
+
+The target tube $\bigg\{X_{j}, j ; j = k + 1, ..., N \bigg\}$ is reachable at time $k$ if and only if $x_{k} \in T_{k}^{*}$ e.g. the target tube is reachable if and only if $X_{0} \subset T_{0}^{*}$
+
+

@@ -1,52 +1,93 @@
-if (!require('assertthat')) install.packages('asserthat')
-if (!require('matrixcalc')) install.packages('matrixcalc')
-if (!require('mvtnorm')) install.packages('mvtnorm')
-if (!require('Matrix')) install.packages('Matrix')
-
-# Initial values for x, A, B, C and R
-N = 101 # go to 101 since R's indexing starts at 1
-# the first element of everything is associted with t = 0, and the last element (the 101th element) with t = 100
-x0 = c(1,1)
-A = matrix(c(0,1,2,0), nrow = 2, ncol = 2)
-B = matrix(c(2,0,5,3), nrow = 2, ncol = 2)
-are_equal(rankMatrix(cbind(A, A%*%B))[1], max(nrow(A), ncol(A)))
-C = c(2,1)
-Q = C %*% t(C)
-R = diag(x = c(2,3))
-assert_that(is.positive.definite(R))
-# 100 disturbances
-ws = rmvnorm(N-1, mean = c(0,0), sigma = diag(x = c(0.1,0.2)))
-
-# Initialize stores for x, L and K
-x.mat <- matrix(NA, nrow = N, ncol = length(x0))
-# store the initial state x0 as the first element in x
-x.mat[1,] <- x0
-#L.mat <- matrix(NA, nrow = N, ncol = length(x0))
-L.list <- list()
-# K's are (length of C) x (length of C), e.g. NxN
-K.list <- list()
-
-# Terminal K_N = C'C
-K.list[[N]] <- Q
-
-# for t = 99 to 0, solve for K and L
-# R indices 100 to 1
-for (t in (N-1):1) {
-  K.tplus1 <- K.list[t+1][[1]]
-  K.list[[t]] <- t(A) %*% (K.tplus1 - K.tplus1%*%B%*% solve(R + t(B)%*%K.tplus1%*%B) %*% t(B) %*% K.tplus1) %*% A + Q
-  L.list[[t]] <- -solve(R + t(B)%*%K.tplus1%*%B) %*% t(B) %*% K.tplus1 %*% A
-}
-
-# Use L's to solve for optimal control
-# from t = 1 to 100 (e.g. R indices 2 to 101)
-# first component of xs is x0 -> x0, so need to index from t+1
-for (t in 2:N) {
-  lastperiod <- t-1
-  x.lastperiod <- x.mat[lastperiod,]
-  L.lastperiod <- L.list[[lastperiod]]
-  w.lastperiod <- ws[lastperiod,]
-  # solve for x_{k+1}
-  x.mat[t,] <- A %*% x.lastperiod + B %*% (L.lastperiod %*% x.lastperiod) + w.lastperiod
-}
+setwd('~/Box Sync/abarciausksas/second_term/stochastic/ps4')
+source('get.states.R')
 
 # final x.mat will be matrix of our states
+# test default is not broken
+res <- get.states()
+
+# (i) Fix R and x0, and compare the behavior of the system for two covariance matrices for the disturbances,
+# one “much larger” than the other, under optimal control (given by the discrete-time Riccati equation)
+# small
+first.q.small <- get.states()
+# explicitly state N for clarity
+N = 101
+first.q.large <- get.states(N = N, ws = rmvnorm(N-1, mean = c(0,0), sigma = diag(x = c(1.2,3.2))))
+
+min.x1 <- min(first.q.large$x.matrix[,1])
+max.x1 <- max(first.q.large$x.matrix[,1])
+plot(first.q.small$x.matrix[,1],
+     type = 'l',
+     col = 'blue',
+     ylim = c(min.x1, max.x1),
+     ylab = 'x1')
+lines(first.q.large$x.matrix[,1], type = 'l', col = 'red')
+
+min.x2 <- min(first.q.large$x.matrix[,2])
+max.x2 <- max(first.q.large$x.matrix[,2])
+plot(first.q.small$x.matrix[,2],
+     type = 'l',
+     col = 'blue',
+     ylim = c(min.x2, max.x2),
+     ylab = 'x2')
+lines(first.q.large$x.matrix[,2], type = 'l', col = 'red')
+
+# (ii) Fix R and D, and compare the behavior of the system for two initial conditions,
+# one "much larger" than the other, under optimal control;
+second.q.small <- get.states()
+second.q.large <- get.states(x0 = c(21,43))
+min.x1 <- min(second.q.small$x.matrix[,1])
+max.x1 <- max(second.q.large$x.matrix[,1])
+plot(second.q.small$x.matrix[,1],
+     type = 'l',
+     col = 'blue',
+     ylim = c(min.x1-2, max.x1),
+     ylab = 'x1')
+lines(second.q.large$x.matrix[,1], type = 'l', col = 'red')
+
+min.x2 <- min(second.q.small$x.matrix[,2])
+max.x2 <- max(second.q.large$x.matrix[,2])
+plot(second.q.small$x.matrix[,2],
+     type = 'l',
+     col = 'blue',
+     ylim = c(min.x2-10, max.x2),
+     ylab = 'x2')
+lines(second.q.large$x.matrix[,2], type = 'l', col = 'red')
+
+# (iii) Fix x0 and D, and compare the behavior of the system for two input-cost matrices,
+# one "much larger" than the other, under optimal control;
+third.q.small <- get.states()
+third.q.large <- get.states(R = diag(x = c(99,23)))
+min.x1 <- min(third.q.small$x.matrix[,1])
+max.x1 <- max(third.q.large$x.matrix[,1])
+plot(third.q.small$x.matrix[,1],
+     type = 'l',
+     col = 'blue',
+     ylim = c(min.x1, max.x1),
+     ylab = 'x1')
+lines(third.q.large$x.matrix[,1], type = 'l', col = 'red')
+
+min.x2 <- min(third.q.small$x.matrix[,2])
+max.x2 <- max(third.q.large$x.matrix[,2])
+plot(third.q.small$x.matrix[,2],
+     type = 'l',
+     col = 'blue',
+     ylim = c(min.x2, max.x2),
+     ylab = 'x2')
+lines(third.q.large$x.matrix[,2], type = 'l', col = 'red')
+
+# (iv) Fix R, x0, and D, and compare the behavior of the system under optimal control vs. steady-state control
+# (given by the algebraic Riccati equation).
+source('get.states.R')
+fourth.q.normal <- get.states(riccardi = FALSE)
+fourth.q.riccardi <- get.states(riccardi = TRUE)
+plot(fourth.q.normal$x.matrix[,1],
+     type = 'l',
+     col = 'blue',
+     ylab = 'x1')
+lines(fourth.q.riccardi$x.matrix[,1], type = 'l', col = 'red')
+
+plot(fourth.q.normal$x.matrix[,2],
+     type = 'l',
+     col = 'blue',
+     ylab = 'x2')
+lines(fourth.q.riccardi$x.matrix[,2], type = 'l', col = 'red')
