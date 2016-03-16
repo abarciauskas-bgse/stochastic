@@ -73,7 +73,9 @@ The target tube $\bigg\{X_{j}, j ; j = k + 1, ..., N \bigg\}$ is reachable at ti
 
 Below we define the function called `get.states` which returns a $2\times 1$ vector of states from time $1$ to $N$.
 
-```{r}
+The plots which follow are given 2 per sub-problem, 1 each of the values of $x$ state vector. In other words, one plot for each $x_{1}$ and $x_{2}$ over time given the different system arguments. The blue line is always for the "small" or "non-riccardi" version of the system and the red line is always for the "large" or "riccardi" of the system.
+
+```{r message=FALSE, warning=FALSE}
 if (!require('assertthat')) install.packages('asserthat')
 if (!require('matrixcalc')) install.packages('matrixcalc')
 if (!require('mvtnorm')) install.packages('mvtnorm')
@@ -81,7 +83,8 @@ if (!require('Matrix')) install.packages('Matrix')
 
 # Initial values for x, A, B, C and R
 # go to 101 since R's indexing starts at 1
-# # the first element of everything is associted with t = 0, and the last element (the 101th element) with t = 100
+# the first element of everything is associted with t = 0,
+# and the last element (the 101th element) with t = 100
 get.states <- function(N = 101,
                        x0 = c(1,1),
                        A = matrix(c(0,1,1,0), nrow = 2, ncol = 2),
@@ -114,7 +117,9 @@ get.states <- function(N = 101,
     # check to see if we have converged
     K.tplus2 <- K.list[t+2][[1]]
     K.list[[t]] <- if ((riccardi == FALSE) || (!(t == N-1) && !(K.tplus2 == K.tplus1))) {
-      t(A) %*% (K.tplus1 - K.tplus1%*%B%*% solve(R + t(B)%*%K.tplus1%*%B) %*% t(B) %*% K.tplus1) %*% A + Q
+      # break into parts for readability
+      inner <- K.tplus1 - K.tplus1 %*% B %*% solve(R + t(B) %*% K.tplus1 %*% B) %*% t(B) %*% K.tplus1
+      t(A) %*% (inner) %*% A + Q
     } else {
       K.tplus1
     }
@@ -202,7 +207,7 @@ plot(third.q.small$x.matrix[,1],
      col = 'blue',
      ylim = c(min.x1, max.x1),
      ylab = 'x1')
-lines(third.q.large$x.matrix[,1], type = 'l', col = 'red')
+lines(third.q.large$x.matrix[,1]+1e-2, type = 'l', col = 'red')
 
 min.x2 <- min(third.q.small$x.matrix[,2])
 max.x2 <- max(third.q.large$x.matrix[,2])
@@ -211,7 +216,7 @@ plot(third.q.small$x.matrix[,2],
      col = 'blue',
      ylim = c(min.x2, max.x2),
      ylab = 'x2')
-lines(third.q.large$x.matrix[,2], type = 'l', col = 'red')
+lines(third.q.large$x.matrix[,2]+1e-2, type = 'l', col = 'red')
 ```
 
 **(iv) Fix $R$, $x_{0}$, and $D$, and compare the behavior of the system under optimal control vs. steady-state control (given by the algebraic Riccati equation).**
@@ -223,11 +228,11 @@ plot(fourth.q.normal$x.matrix[,1],
      type = 'l',
      col = 'blue',
      ylab = 'x1')
-lines(fourth.q.riccardi$x.matrix[,1], type = 'l', col = 'red')
+lines(fourth.q.riccardi$x.matrix[,1]+1e-2, type = 'l', col = 'red')
 
 plot(fourth.q.normal$x.matrix[,2],
      type = 'l',
      col = 'blue',
      ylab = 'x2')
-lines(fourth.q.riccardi$x.matrix[,2], type = 'l', col = 'red')
+lines(fourth.q.riccardi$x.matrix[,2]+1e-2, type = 'l', col = 'red')
 ```
