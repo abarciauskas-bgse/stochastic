@@ -69,6 +69,45 @@ $$X_{N}^{*} = X_{N}$$
 
 The target tube $\bigg\{X_{j}, j ; j = k + 1, ..., N \bigg\}$ is reachable at time $k$ if and only if $x_{k} \in T_{k}^{*}$ e.g. the target tube is reachable if and only if $X_{0} \subset T_{0}^{*}$
 
+# Problem 3
+
+The set up of the problem is that we have the DP algorithm of the form
+$$ J_{N}(x_{N}, y_{N}) = x^{'}_{N} Q_{N} x_{N}
+J_{k}(x_{k}, y_{k}) = min E \{ x^{'}_{k} Q_{k} x_{k} + u^{'}_{k} R_{k} u_{k} +\Sigma p_{i}^{k+1}  J_{k+1}(x_{k+1}, i) | y_{k}\}$$
+
+Then we need to prove $J_{k}(x_{k}, y_{k}) =  x^{'}_{k} K_{k} x_{k} + x^{'}_{k}b_{k}(y_{k}) + c_{k}(y_{k})$ by induction. We start by assuming it is true for $J_{k+1}(x_{k+1}, y_{k+1})$, then for $J_{k}(x_{k}, y_{k})$
+$$J_{k}(x_{k}, y_{k}) = min E \{ x^{'}_{k} Q_{k} x_{k} + u^{'}_{k} R_{k} u_{k} +\Sigma p_{i}^{k+1}  [x^{'}_{k+1} K_{k+1} x_{k+1} + x^{'}_{k+1}b_{k+1}(i) + c_{k+1}(i)] | y_{k}\} = 
+x^{'}_{k} Q_{k} x_{k} + min\{ u^{'}_{k} R_{k} u_{k} + E \{(A_{k}x_{k} + B_{k}u_{k} + w_{k})^{'}K_{k+1}(A_{k}x_{k} + B_{k}u_{k} + w_{k}) + (A_{k}x_{k} + B_{k}u_{k} + w_{k})^{'} b_{k+1} | y_{k}\} \gamma_{k+1}\}$$
+
+Where we have absorbed the sum terms to pull out the terms with $A_{k}$ and $B_{k}$, and $b_{k+1} = \Sigma p_{i}^{k+1}b_{k+1}(i)$, $\gamma_{k+1} = \Sigma p_{i}^{k+1}c_{k+1}(i)$. The expectations are over $w_{k}$, and the minimisation over $u_{k}$, as normal, so further simplifications can be made to give us a term dependent on $u_{k}$ and one not. The term dependent on $u_{k}$ is the one that gives our optimal control law,
+$$min \{u^{'}_{k} (R_{k}+ B^{'}_{k}K_{k+1}B_{k})u_{k} + 2u^{'}_{k}B^{'}_{k}K_{k+1}A_{k}x_{k} + 2u^{'}_{k}B^{'}_{k}K_{k+1}E[w_{k}|y_{k}] + u^{'}_{k}B^{'}_{k}b_{k+1}\}$$
+
+The minimum here can be found by differentiation as the first term is positive,
+$$ 2(R_{k}+ B^{'}_{k}K_{k+1}B_{k})u^{*}_{k} +2B^{'}_{k}K_{k+1}(A_{k}x_{k} + E[w_{k}|y_{k}] + B^{'}_{k}b_{k+1}) = 0 $$
+This gives an optimal control law as
+$$u^{*}_{k} = -(R_{k}+ B^{'}_{k}K_{k+1}B_{k})^{-1}B^{'}_{k}K_{k+1}(A_{k}x_{k} + E[w_{k}|y_{k}]) - \frac{1}{2}(R_{k}+ B^{'}_{k}K_{k+1}B_{k})^{-1}B^{'}_{k}b_{k+1}$$
+And the final term can be referred to as $\alpha_{k}$. 
+
+Substituting this back in to the equation gives us a set of quadratic, linear and constant terms in $x_{k}$, which can be re-formulated in the desired form to give,
+$$J_{k}(x_{k}, y_{k}) = x^{'}_{k} K_{k} x_{k} + x^{'}_{k}b_{k}(y_{k}) + c_{k}(y_{k})$$
+which is the desired form. So the proof is complete and the desired form of the optimal control was found along the way.
+
+# Problem 4
+
+Now the aim is to prove that the optimal control law depends linearly on the state. Considering the cost function, the formulation of the DP algorithm is
+$$ J_{N}(X_{N}) = e^{x^{2}_{N}}
+J_{k}(x_{k}) = min \{e^{x^{2}_{k} + ru^{2}_{k}}E(J_{k+1}(x_{k+1}))\}$$
+and we want to proceed by proving $J_{k}(x_{k})=\alpha_{k}e^{\beta_{k}x^{2}_{k}}$. Assume it is true for $J_{k+1}(x_{k+1}$ and considering $x_{k+1} = a_{k}x_{k} + b_{k}u_{k} + w_{k}$, then for $J_{k}(x_{k})$,
+$$J_{k}(x_{k}) = min \{e^{x^{2}_{k} + ru^{2}_{k}}E(\alpha_{k+1}e^{\beta_{k+1}x^{2}_{k+1}})\} = 
+min \{e^{x^{2}_{k} + ru^{2}_{k}}\frac{\alpha_{k+1}}{\sqrt{Z_{k+1}}}e^{\frac{\beta_{k+1}(a_{k}x_{k} + b_{k}u_{k})^{2}}{Z_{k+1}}}\}$$
+where the given relation was used and $Z_{k+1} = 1 - 2\beta_{k+1}\sigma^{2}$ was used as a dummy variable to make things look a bit neater.
+
+Now, the only non-constant terms wrt $u_{k}$ are the exponentials, so the minimisation is a simple problem of differentiating the exponential parts to give,
+$$2ru^{*}_{k} +  2\frac{b_{k}u^{*}_{k}}{Z_{k+1}} = 0$$
+
+This is clearly a linear equation, so we have $u^{*}_{k} = \gamma_{k}x_{k}$, as desired. Similar to the last problem, subsituting in the form for $u^{*}_{k}$ will complete the induction, as there is a $x_{k}^{2}$ term introduced in the exponential. We can then absorb all remaining constants and re-using the relation given by the question, a form of $J_{k}(x_{k})=\alpha_{k}e^{\beta_{k}x^{2}_{k}}$ is returned simply.
+
+
 # Problem 5
 
 Below we define the function called `get.states` which returns a $2\times 1$ vector of states from time $1$ to $N$.
