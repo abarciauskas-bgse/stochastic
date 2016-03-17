@@ -5,6 +5,36 @@ date: 17 March 2016
 output: pdf_document
 ---
 
+# Problem 1
+
+Show $\Delta J_{k+1}(x_{k}) \leq \Delta J_{k}(x_{k})$
+
+Given $\Delta J_{k} (x_{k}+1) \leq \Delta J_{k}(x_{k})$
+
+By definition of $\Delta$:
+
+$$J_{k}(x_{k}+1) - J_{k}(x_{k}) \leq \Delta J_{k}(x_{k})$$
+
+Using the definition of $J_{k}(x+i)$ from the problem:
+
+$$\big(r_{k}(d^{*}) - d^{*}\Delta J_{k+1}(x_{k}+1) + J_{k+1}(x_{k}+1)\big) - \big(r_{k}(d^{*}) - d^{*} \Delta J_{k+1}(x_{k}) + J_{k+1}(x_{k})\big) \leq \Delta J_{k}(x_{k})$$
+
+The $r_{k}(d^{*})$ terms cancel and grouping $d^{*}$ terms simplifies:
+
+$$d^{*}\big(\Delta J_{k+1}(x_{k}) - \Delta J_{k+1} (x_{k}+1)\big) + \Delta J_{k+1}(x_{k}+1) \leq \Delta J_{k}(x_{k})$$
+
+$$d^{*} \Delta J_{k+1} (x_{k}) + (1-d^{*})\Delta J_{k+1}(x_{k} + 1) \leq \Delta J_{k}(x_{k})$$
+
+Swapping sides of $d^{*}$:
+
+$$\Delta J_{k}(x_{k}) + (d^{*} - 1)\Delta J_{k+1}(x_{k} + 1) \leq d^{*}\Delta J_{k}(x_{k})$$
+
+$$(d^{*} - 1)\Delta J_{k+1}(x_{k}+1) \leq (d^{*}-1)\Delta J_{k}(x_{k}) $$
+
+The $d^{*} - 1$ on both sides term cancels:
+
+$$\Delta J_{k+1}(x_{k}) \leq \Delta J_{k}(x_{k}) $$
+
 # Problem 2
 
 Given definitions:
