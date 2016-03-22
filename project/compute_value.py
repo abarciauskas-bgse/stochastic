@@ -39,8 +39,11 @@ def compute_value(grid,goal,cost):
     next_to_visit = [up, left]
     # update value dict
     visited = [current_node]
-    value_dict = update_dict(value_dict, up, current_value)
-    value_dict = update_dict(value_dict, left, current_value)
+    for n in next_to_visit:
+      if grid[n[0]][n[1]] == 0:
+        value_dict = update_dict(value_dict, n, current_value)
+      else:
+        value_dict = update_dict(value_dict, n, 99)
     while len(next_to_visit) > 0:
         # next node to visit
         current_node = next_to_visit.pop(0)
@@ -49,16 +52,26 @@ def compute_value(grid,goal,cost):
         visited.append(current_node)
         up = relative_location(current_node, delta[0])
         left = relative_location(current_node, delta[1])
+        down = relative_location(current_node, delta[2])
+        right = relative_location(current_node, delta[3])
         neighbors = []
-        for i in [up,left]:
-            if not -1 in i: neighbors.insert(0, i)
+        for i in [up,left,down,right]:
+            if not -1 in i and not i[0] == len(grid) and not i[1] == len(grid[0]) and not i == goal: neighbors.insert(0, i)
         for n in neighbors:
             if n not in visited:
-                # ADD ME: CHECK IF EMPTY IN GRID OR OBSTACLE
-                value_dict = update_dict(value_dict, n, current_value+1)
-                next_to_visit.insert(0, n)
-            elif value_dict[n[0]][n[1]] > (current_value+1):
+                if grid[n[0]][n[1]] == 0:
+                  if n[0] in value_dict.keys() and n[1] in value_dict[n[0]].keys():
+                      if value_dict[n[0]][n[1]] > current_value:
+                          value_dict = update_dict(value_dict, n, (current_value+1))
+                          next_to_visit.insert(0, n)
+                  else:
+                      value_dict = update_dict(value_dict, n, current_value+1)
+                  if not n == (0,0): next_to_visit.insert(0, n)
+                else:
+                    value_dict = update_dict(value_dict, n, 99)
+            elif value_dict[n[0]][n[1]] > current_value:
                 value_dict = update_dict(value_dict, n, (current_value+1))
+                next_to_visit.insert(0, n)
     return value_dict # to bo value grid someday
 
 
