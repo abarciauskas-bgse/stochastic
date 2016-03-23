@@ -1,5 +1,6 @@
 import time
 
+# FIXME: will break if there is no path to end - should return all 99's
 grid = [[0, 1, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0],
@@ -84,8 +85,10 @@ def compute_value(grid,goal,cost):
             elif value_dict[n[0]][n[1]] > current_value:
                 value_dict = conditional_update(value_dict, n, current_value)
                 next_to_visit.insert(0, n)
-    return value_dict # to bo value grid someday
-
+    value_grid = []
+    for i in range(0,len(value_dict)):
+        value_grid.append(value_dict[i].values())
+    return value_grid
 
 res = compute_value(grid, goal, cost)
 print(res)
