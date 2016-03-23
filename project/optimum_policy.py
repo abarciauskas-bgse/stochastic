@@ -29,6 +29,26 @@ delta = [[-1, 0 ], # go up
 
 delta_name = ['^', '<', 'v', '>']
 
+
+def relative_location(position, delta):
+  return tuple([x + y for x, y in zip(position, delta)])
+
+# look at all the neighbors and return the direction of fastest descent
+def min_neighbor(node, value):
+    firstdir = relative_location(node, delta[0])
+    if node[0] == 0: firstdir = relative_location(node, delta[1])
+    minv = value[firstdir[0]][firstdir[1]]
+    mindir = 0
+    for i in range(1,4):
+        rel_loc = relative_location(node, delta[i])
+        if -1 not in rel_loc and rel_loc[0] < len(value) and rel_loc[1] < len(value[0]):
+            newv = value[rel_loc[0]][rel_loc[1]]
+            if newv < minv:
+                minv = newv
+                mindir = i
+    return mindir
+
+
 def optimum_policy(grid,goal,cost):
     # ----------------------------------------
     # modify code below
@@ -59,7 +79,21 @@ def optimum_policy(grid,goal,cost):
                                 change = True
                                 value[x][y] = v2
 
-    # for each row and col index move in the direction of the fastest return
-    return value
+    # for each position in the value matrix,
+    # move in the direction of nearest return
+    # find the least neighbor and putted to that
+    policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
+    for x in range(len(value)):
+        for y in range(len(value[0])):
+            # if not an obstacle
+            if not value[x][y] == 99 and not [x,y] == goal and not [x,y] == [0,0]:
+                mindirection = min_neighbor([x,y], value)
+                policy[x][y] = delta_name[mindirection]
+    #return value
+    return policy
 
-print(optimum_policy(grid, goal, cost))
+
+pol = optimum_policy(grid, goal, cost)
+for i in range(0, len(pol)):
+    print(pol[i])
+
