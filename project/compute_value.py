@@ -62,13 +62,16 @@ def compute_value(grid,goal,cost):
         # adds current node to end of visited
         visited.append(current_node)
         neighbors = all_neighbors(current_node, grid)
+        # for each neighbor, update the value to the current step value plus one
+        # unless it's already less than or equal to the current step value (i.e. closer to home)
         for n in neighbors:
+            obstacle = grid[n[0]][n[1]] == 1
             if n not in visited:
-                if grid[n[0]][n[1]] == 0:
+                # only update if it's not an obstacle
+                if not obstacle:
                   if n[0] in value_dict.keys() and n[1] in value_dict[n[0]].keys():
                       if value_dict[n[0]][n[1]] > current_value:
                           value_dict = update_dict(value_dict, n, (current_value+1))
-                          next_to_visit.insert(0, n)
                   else:
                       value_dict = update_dict(value_dict, n, current_value+1)
                   if not n == (0,0): next_to_visit.insert(0, n)
