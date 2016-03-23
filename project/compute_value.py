@@ -40,6 +40,11 @@ def all_neighbors(node, grid):
         if not -1 in i and not i[0] == len(grid) and not i[1] == len(grid[0]): neighbors.insert(0, i)
     return neighbors
 
+def conditional_update(value_dict, n, current_value):
+    if value_dict[n[0]][n[1]] > current_value:
+        value_dict = update_dict(value_dict, n, (current_value+1))
+    return value_dict
+
 def compute_value(grid,goal,cost):
     current_node = goal
     # set value in value dict e.g. {3:{3:0}}
@@ -70,15 +75,14 @@ def compute_value(grid,goal,cost):
                 # only update if it's not an obstacle
                 if not obstacle:
                   if n[0] in value_dict.keys() and n[1] in value_dict[n[0]].keys():
-                      if value_dict[n[0]][n[1]] > current_value:
-                          value_dict = update_dict(value_dict, n, (current_value+1))
+                      value_dict = conditional_update(value_dict, n, current_value)
                   else:
                       value_dict = update_dict(value_dict, n, current_value+1)
                   if not n == (0,0): next_to_visit.insert(0, n)
                 else:
                     value_dict = update_dict(value_dict, n, 99)
             elif value_dict[n[0]][n[1]] > current_value:
-                value_dict = update_dict(value_dict, n, (current_value+1))
+                value_dict = conditional_update(value_dict, n, current_value)
                 next_to_visit.insert(0, n)
     return value_dict # to bo value grid someday
 
