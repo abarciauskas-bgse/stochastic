@@ -27,6 +27,19 @@ def update_dict(dicto, node, value):
         dicto[row] = {col: value}
     return dicto
 
+# get the relative positions of the node
+# and append to a list of neighbors if not outside the grid
+#
+def all_neighbors(node, grid):
+    up = relative_location(node, delta[0])
+    left = relative_location(node, delta[1])
+    down = relative_location(node, delta[2])
+    right = relative_location(node, delta[3])
+    neighbors = []
+    for i in [up,left,down,right]:
+        if not -1 in i and not i[0] == len(grid) and not i[1] == len(grid[0]): neighbors.insert(0, i)
+    return neighbors
+
 def compute_value(grid,goal,cost):
     current_node = goal
     # set value in value dict e.g. {3:{3:0}}
@@ -34,9 +47,7 @@ def compute_value(grid,goal,cost):
     value_dict = {current_node[0]: {current_node[1]: 0}}
     current_value = 1
     # next is up and left
-    up = relative_location(goal, delta[0])
-    left = relative_location(goal, delta[1])
-    next_to_visit = [up, left]
+    next_to_visit = all_neighbors(goal, grid)
     # update value dict
     visited = [current_node]
     for n in next_to_visit:
@@ -50,13 +61,7 @@ def compute_value(grid,goal,cost):
         current_value = value_dict[current_node[0]][current_node[1]]
         # adds current node to end of visited
         visited.append(current_node)
-        up = relative_location(current_node, delta[0])
-        left = relative_location(current_node, delta[1])
-        down = relative_location(current_node, delta[2])
-        right = relative_location(current_node, delta[3])
-        neighbors = []
-        for i in [up,left,down,right]:
-            if not -1 in i and not i[0] == len(grid) and not i[1] == len(grid[0]) and not i == goal: neighbors.insert(0, i)
+        neighbors = all_neighbors(current_node, grid)
         for n in neighbors:
             if n not in visited:
                 if grid[n[0]][n[1]] == 0:
