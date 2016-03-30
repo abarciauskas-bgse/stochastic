@@ -13,13 +13,20 @@
 # previous video. The goal cell should have '*'.
 # ----------
 
-grid = [[0, 1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0]]
-init = [0, 0]
-goal = [len(grid)-1, len(grid[0])-1]
+# grid = [[0, 1, 0, 0, 0, 0],
+#         [0, 1, 1, 0, 1, 0],
+#         [0, 0, 0, 0, 1, 0],
+#         [0, 1, 1, 1, 1, 0],
+#         [0, 1, 0, 1, 1, 0]]
+grid = [[1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 0, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 0, 1, 1],
+        [1, 1, 1, 0, 1, 1]]
+init = [4, 3]
+goal = [2,0]
+init = [0,0]
+#goal = [len(grid)-1, len(grid[0])-1]
 cost = 1 # the cost associated with moving from a cell to an adjacent one
 
 delta = [[-1, 0 ], # go up
