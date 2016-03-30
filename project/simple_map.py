@@ -2,8 +2,9 @@ import itertools
 import time 
 execfile('optimum_policy.py')
 
-grid = [[0,0],
-        [1,0]]
+grid = [[0,0,1],
+        [1,0,0],
+        [1,0,0]]
 
 rows = range(len(grid))
 cols = range(len(grid[0]))
@@ -11,11 +12,9 @@ cols = range(len(grid[0]))
 states = list(itertools.product(rows,cols,range(len(delta))))
 init = states[0][0:2]
 goal = states[-1][0:2]
-print(init)
+print(goal)
 # determine optimal path
 opt = optimum_policy(grid, init, cost)
-for i in range(0,len(opt)):
-  print(opt[i])
 
 # for each state in the map, the transition to every adjacent state has some probability,
 # if there is a wall, the probability is 0
@@ -55,7 +54,6 @@ for state in states:
         trans_p[state][(x2,y2,d)] = 0.2
         emit_p[state][d] = 0.2
       elif (x2,y2) == goal:
-        print('gooooal')
         trans_p[state][(x2,y2,d)] = 0.8
         emit_p[state][d] = 0.8
       else:
@@ -69,11 +67,3 @@ for state in states:
   missing_deltas = set(range(len(delta))).difference(emit_p[state].keys())
   for missing_delta in missing_deltas:
     emit_p[state][missing_delta] = 0.0
-
-# print trans_p
-# print('')
-# print emit_p
-      # if orientation is in direction of highest gain, weight that probablitiy very high
-#   if orientation is in opposite direction of highest gain, weight that probability 0
-#   weight other directions corresponding to gain of that move
-#

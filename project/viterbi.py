@@ -24,8 +24,6 @@ def viterbi(states, piarr, trans_p, emit_p, obs):
       maxprob = max(prob_each_step)
       argmaxk = prob_each_step.index(maxprob)
       T1[t][s] = maxprob
-  for i in dptable(T1):
-      print i
   #terminal state
   opt = []
   for j in T1:
@@ -48,6 +46,7 @@ piarr[2] = 0.9
 #         [0,0]]
 # last observation has to make sense for position
 # obs = (2,3,1)
-obs = (3,2,0)
-print(viterbi(states, piarr, trans_p, emit_p, obs))
-
+obs = (3,3,2,2,0)
+res = viterbi(states, piarr, trans_p, emit_p, obs)
+# should plot this path
+print(res)
