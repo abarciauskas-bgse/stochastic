@@ -1,7 +1,7 @@
 # States correspond to positions of Xavier
 # TODO: Add orientations?
 # State space S
-states = (1,2,3,4)
+states = (0,1,2,3)
 # e.g. directives motivated by current belief state
 # ADD MOVE UP
 # Observation space O
@@ -10,19 +10,19 @@ obs = ('move left', 'move down', 'stay put', 'stay put')
 # chosen somewhat arbitrarily
 # Transition matrix A
 trans = {
-    1: {1: 0.1, 2: 0.8, 3: 0.0, 4: 0.1},
-    2: {1: 0.1, 2: 0.1, 3: 0.8, 4: 0.0},
-    3: {1: 0.0, 2: 0.1, 3: 0.8, 4: 0.0},
-    4: {1: 0.1, 2: 0.0, 3: 0.8, 4: 0.1}
+    0: {0: 0.1, 1: 0.8, 2: 0.0, 3: 0.1},
+    1: {0: 0.1, 1: 0.1, 2: 0.8, 3: 0.0},
+    2: {0: 0.0, 1: 0.1, 2: 0.8, 3: 0.0},
+    3: {0: 0.1, 1: 0.0, 2: 0.8, 3: 0.1}
 }
 # Probability of getting directive
 # ADD MOVE UP
 # Emission matrix B
 emiss = {
-    1: {'move left': 0.7, 'move right': 0.1, 'move down': 0.1, 'stay put': 0.1},
-    2: {'move left': 0.1, 'move right': 0.1, 'move down': 0.7, 'stay put': 0.1},
-    3: {'move left': 0.1, 'move right': 0.1, 'move down': 0.1, 'stay put': 0.7},
-    4: {'move left': 0.7, 'move right': 0.1, 'move down': 0.1, 'stay put': 0.1}
+    0: {'move left': 0.7, 'move right': 0.1, 'move down': 0.1, 'stay put': 0.1},
+    1: {'move left': 0.1, 'move right': 0.1, 'move down': 0.7, 'stay put': 0.1},
+    2: {'move left': 0.1, 'move right': 0.1, 'move down': 0.1, 'stay put': 0.7},
+    3: {'move left': 0.7, 'move right': 0.1, 'move down': 0.1, 'stay put': 0.1}
 }
 # An initial array of probabilities of size K - e.g. the possible number of states
 # Here, say it's known as the first state
