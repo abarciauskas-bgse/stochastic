@@ -43,57 +43,14 @@ def dptable(V):
 
 piarr = [0.0]*len(states)
 piarr[0:2] = [0.05]*3
-piarr[1] = 0.9
-# grid = [[0,1],
-#         [0,0]]
-# last observation has to make sense for position
-# obs = (2,3,1)
-obs = (2,2,3,3,1)
+piarr[3] = 0.9
+obs = (2,3,2,3,3,0,0,1,3)
 vit = viterbi(states, piarr, trans_p, emit_p, obs)
 path = vit[0]
-print(path)
-
-def dendro_dict(k):
-  return {'name': str(k[0]), 'value': k[1], 'children': []}
-
-def dendro_list(states):
-  return [dendro_dict(k) for k in states]
-
-trellis_for_vis = {'name': 't0', 'children': dendro_list(zip(states, vit[1][0].values()))}
-# add first time period
-
-# for s in range(len(states)):
-#   moves = dendro_list(zip(states, vit[1][1].values()))
-#   trellis_for_vis['children'][s]['children'] = moves
-#   for s2 in range(len(states)):
-#     moves = dendro_list(zip(states, vit[1][2].values()))
-#     trellis_for_vis['children'][s]['children'][s2]['children'] = moves
-# #
-# import json
-# with open('trellis.json', 'w') as outfile:
-#     json.dump(trellis_for_vis, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
-
-grid_with_position = copy.deepcopy(grid)
-for r in range(len(grid_with_position)):
-  for c in range(len(grid_with_position[0])):
-    if grid_with_position[r][c] == 0:
-      grid_with_position[r][c] = ' '
-    else:
-      grid_with_position[r][c] = '|'
-
 path_states = [states[step] for step in path]
+print(path_states)
+
 import json
 with open('path.json', 'w') as outfile:
     json.dump(path_states, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
 
-# for step in path:
-#   state = states[step]
-#   position_x = state[0]
-#   position_y = state[1]
-#   orientation = state[2]
-#   grid_with_position[position_x][position_y] = delta_name[orientation]
-#   for i in range(len(grid)):
-#     print(grid_with_position[i])
-#   grid_with_position[position_x][position_y] = ' '
-#   print('\n')
-#   time.sleep(1)
