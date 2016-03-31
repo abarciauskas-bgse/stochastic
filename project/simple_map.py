@@ -1,21 +1,25 @@
 import itertools
-import time 
+import time
 execfile('optimum_policy.py')
 
-grid = [[0,0,1],
-        [1,0,0],
-        [1,0,0]]
+# grid = [[0,1],
+#         [0,0]]
 
+grid = [[0,1,0],
+        [0,1,0],
+        [0,0,0]]
 rows = range(len(grid))
 cols = range(len(grid[0]))
 # delta = orientation
 states = list(itertools.product(rows,cols,range(len(delta))))
 init = states[0][0:2]
 goal = states[-1][0:2]
-print(goal)
+
 # determine optimal path
 opt = optimum_policy(grid, init, cost)
-
+print(opt)
+# for i in range(len(opt)):
+#   print(opt[i])
 # for each state in the map, the transition to every adjacent state has some probability,
 # if there is a wall, the probability is 0
 # if there is not a wall AND the direction of current orientation is the same as the fastest ascent,
@@ -51,8 +55,8 @@ for state in states:
         emit_p[state][d] = 0.0
       # if looking in opposite direction
       elif gain == 1 and delta[o] == delta[d-2]:
-        trans_p[state][(x2,y2,d)] = 0.2
-        emit_p[state][d] = 0.2
+        trans_p[state][(x2,y2,d)] = 0.8
+        emit_p[state][d] = 0.8
       elif (x2,y2) == goal:
         trans_p[state][(x2,y2,d)] = 0.8
         emit_p[state][d] = 0.8
