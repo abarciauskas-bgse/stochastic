@@ -56,8 +56,8 @@ var vis = d3.select("#body").append("svg:svg")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 var o = d3.scale.ordinal()
-  .domain([0,0.5])
-  .range(colorbrewer.YlOrRd[9]);
+  .domain([0,0.001])
+  .range(colorbrewer.YlOrRd[6].reverse());
 
 var cell_ht = 30
 var gridoffset = 300
@@ -95,7 +95,7 @@ d3.json('path.json', function(json) {
   })
 });
 
-d3.json("trellis.json", function(json) {
+d3.json("dict.json", function(json) {
   root = json;
   root.x0 = h / 2;
   root.y0 = 0;
@@ -137,7 +137,11 @@ function update(source) {
   nodeEnter.append("svg:circle")
       .attr("r", 1e-6)
       .style("fill", function(d) {
-        return o(d.value);
+        if (d.value == 0.0) {
+          return 'white'
+        } else {
+          return o(d.value)
+        };
       });
 
   nodeEnter.append("svg:text")
