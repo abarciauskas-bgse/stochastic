@@ -1,8 +1,8 @@
 ## The Viterbi Algorithm for HMMs and POMDPs (Partially Observable Markov Decision Processes)
 
-Here lies the meat and potatoes of a stochastic modelling project exploring how the viterbi algorithm may be used to solve HMMs and POMDPs for autonomous robot navigation.
+Here lies the meat and potatoes of a project exploring how the Viterbi algorithm may be used to solve HMMs and POMDPs for autonomous robot navigation.
 
-#### Simulating autonomous robot navigation
+### Simulating autonomous robot navigation
 
 The process of simulation is as follows:
 
