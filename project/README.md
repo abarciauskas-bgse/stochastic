@@ -41,7 +41,6 @@ The state space is not too big itself, it is the set of possible positions and o
 But for the transitions matrix, we consider every possible state transition, so this is a pretty big space! It has dimension `(rows x cols x 4)^2` = **4096**
 
 ```python
-# Did you think I was lying?
 len(trans_p.values())*len(trans_p[(0, 0, 0)].values())
 # 4096
 ```
@@ -240,7 +239,19 @@ obs = (2,3,2,3,3,0,0,1,3)
 vit = viterbi(states, piarr, trans_p, emit_p, obs)
 path = vit[0]
 path_states = [states[step] for step in path]
-print(path_states)
+pp.pprint(path_states)
+# [   (0, 0, 3),
+#     (1, 0, 2),
+#     (1, 1, 3),
+#     (2, 1, 2),
+#     (2, 2, 3),
+#     (2, 3, 3),
+#     (1, 3, 0),
+#     (0, 3, 0),
+#     (0, 2, 1)]
 ```
 
+But who wants to look at a bunch of code. It could be doing anything!
+
+[See it in practice](https://quiet-dusk-44792.herokuapp.com)
 

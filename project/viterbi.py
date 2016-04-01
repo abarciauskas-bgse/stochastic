@@ -43,7 +43,7 @@ obs = (2,3,2,3,3,0,0,1,3)
 vit = viterbi(states, piarr, trans_p, emit_p, obs)
 path = vit[0]
 path_states = [states[step] for step in path]
-print(path_states)
+pp.pprint(path_states)
 
 import json
 with open('path.json', 'w') as outfile:
