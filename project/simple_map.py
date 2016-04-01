@@ -45,6 +45,8 @@ for state in states:
   o = state[2]
   # value of the current state
   current_value = opt[x][y]
+  # tally up non-normalized probabilities
+  total_probs = 0
   # for every delta in deltas
   for d in range(len(delta)):
     # should only check this possibility if we can move there
@@ -57,13 +59,23 @@ for state in states:
       if gain == -1:
         trans_p[state][(x2,y2,d)] = 0.8
         emit_p[state][d] = 0.8
+        total_probs = total_probs + 0.8
       elif gain > 90:
         trans_p[state][(x2,y2,d)] = 0.1
         # small probability we get the wrong idea
         emit_p[state][d] = 0.1
+        total_probs = total_probs + 0.1
       else:
         trans_p[state][(x2,y2,d)] = 0.2
         emit_p[state][d] = 0.2
+        total_probs = total_probs + 0.2
+  # normalize
+  for d in range(len(delta)):
+    x2 = x + delta[d][0]
+    y2 = y + delta[d][1]
+    if not x2 == -1 and not y2 == -1 and x2 < len(opt) and y2 < len(opt[1]):
+      trans_p[state][(x2,y2,d)] = round(trans_p[state][(x2,y2,d)]/total_probs,3)
+      emit_p[state][d] = round(emit_p[state][d]/total_probs,3)
   # but we need to have something for everybody
   # what states are we missing?
   missing_state_transitions = set(states).difference(set(trans_p[state].keys()))
@@ -74,7 +86,7 @@ for state in states:
     emit_p[state][missing_delta] = 0.0
 
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(trans_p)
+pp.pprint(emit_p)
 
 trans_p_json = {}
 for k,v in trans_p.iteritems():
