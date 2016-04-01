@@ -39,13 +39,14 @@ piarr = [0.0]*len(states)
 piarr[0:2] = [0.05]*3
 piarr[3] = 0.9
 # observations: down, right, down, right, right, etc.
-obs = (2,3,2,3,3,0,0,1,3)
+#obs = (2,3,2,3,3,0,0,1,3)
+obs = (2,2,3,3,3,0,0,1,3)
 vit = viterbi(states, piarr, trans_p, emit_p, obs)
 path = vit[0]
 path_states = [states[step] for step in path]
 pp.pprint(path_states)
 
 import json
-with open('path.json', 'w') as outfile:
+with open('site/public/js/path.json', 'w') as outfile:
     json.dump(path_states, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
 

@@ -124,9 +124,10 @@ len(emit_p.values())*len(emit_p[(0,0,0)].values())
 # 256
 ```
 
-You probably didn't ask me to, but I'm going to print the whole thing because I can.
+You probably won't ask, but I'm going to print the whole thing anyways. Hey, it's small enough.
 
 ```python
+pp.pprint(emit_p)
 {   (0, 0, 0): {   0: 0.0, 1: 0.0, 2: 0.889, 3: 0.111},
     (0, 0, 1): {   0: 0.0, 1: 0.0, 2: 0.889, 3: 0.111},
     (0, 0, 2): {   0: 0.0, 1: 0.0, 2: 0.889, 3: 0.111},
