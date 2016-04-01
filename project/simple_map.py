@@ -54,7 +54,7 @@ for state in states:
       # check the gain of that transition
       gain = opt[x2][y2] - current_value
       # if gain is negative, we are going in the right direction
-      if gain == -1:# and delta[o] == delta[d]:
+      if gain == -1:
         trans_p[state][(x2,y2,d)] = 0.8
         emit_p[state][d] = 0.8
       elif gain > 90:

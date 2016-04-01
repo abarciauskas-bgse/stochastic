@@ -1,13 +1,13 @@
 execfile('simple_map.py')
 
 def viterbi(states, piarr, trans_p, emit_p, obs):
-  # Initialize T1 and T2, which keep track of everything done so far
+  # Initialize T1, which keep track of everything done so far
   # T1 - probability of most likely path so far
   T1 = [{}]
   T2 = [{}]
   # length of sequence
   T = len(obs)
-  # init T1 and T2 for each state
+  # init T1 for each state
   for s in range(0, len(states)):
     st = states[s]
     if obs[0] in emit_p[st].keys():
@@ -34,15 +34,11 @@ def viterbi(states, piarr, trans_p, emit_p, obs):
   h = max(T1[-1].values())
   return([opt,T1, T2])
 
-def dptable(V):
-    # Print a table of steps from dictionary
-    yield " ".join(("%10d" % i) for i in range(len(V)))
-    for y in V[0]:
-        yield "%.7s: " % y+" ".join("%.7s" % ("%f" % v[y]) for v in V)
-
+# Prior probability of state space
 piarr = [0.0]*len(states)
 piarr[0:2] = [0.05]*3
 piarr[3] = 0.9
+# observations: down, right, down, right, right, etc.
 obs = (2,3,2,3,3,0,0,1,3)
 vit = viterbi(states, piarr, trans_p, emit_p, obs)
 path = vit[0]
