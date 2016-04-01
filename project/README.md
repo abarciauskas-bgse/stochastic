@@ -6,7 +6,7 @@ Here lies the meat and potatoes of a stochastic modelling project exploring how 
 
 The process of simulation is as follows:
 
-1. Encode an "office map"
+**1. Encode an "office map"**
 
 ```python
 # see `simple_map.py`
@@ -17,7 +17,7 @@ grid = [[0,1,0,0],
         [0,0,1,0]]
 ```
 
-2. Declare a start and goal locations and determine the optimal path for the robot to travel from an arbitrary location
+**2. Declare a start and goal locations and determine the optimal path for the robot to travel from an arbitrary location**
 
 ```python
 rows = range(len(grid))
@@ -32,7 +32,7 @@ for i in range(len(opt)):
     print(opt[i])
 ```
 
-3. Determine the transition and emission probabilities
+**3. Determine the transition and emission probabilities**
 
 Code omitted, see [`simple_map.py`](simple_map.py).
 
@@ -194,7 +194,7 @@ You probably didn't ask me to, but I'm going to print the whole thing because I 
     (3, 3, 3): {   0: 0.8, 1: 0.1, 2: 0.0, 3: 0.0}}
 ```
 
-4. Once we get a set of observations, we use viterbie to solve for the most likely path:
+**4. Once we get a set of observations, we use viterbie to solve for the most likely path:**
 
 ```python
 def viterbi(states, piarr, trans_p, emit_p, obs):
@@ -242,4 +242,5 @@ path = vit[0]
 path_states = [states[step] for step in path]
 print(path_states)
 ```
+
 
