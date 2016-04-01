@@ -252,7 +252,7 @@ pp.pprint(path_states)
 #     (0, 2, 1)]
 ```
 
-But who wants to look at a bunch of code. It could be doing anything!
+But who wants to look at a bunch of code, it could be doing anything!
 
 [See it in practice](https://quiet-dusk-44792.herokuapp.com)
 
