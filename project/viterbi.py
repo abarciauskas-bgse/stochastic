@@ -1,4 +1,3 @@
-import copy
 execfile('simple_map.py')
 
 def viterbi(states, piarr, trans_p, emit_p, obs):

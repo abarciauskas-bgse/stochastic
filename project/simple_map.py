@@ -1,6 +1,8 @@
 import copy
 import itertools
 import time
+import json
+import pprint
 execfile('optimum_policy.py')
 
 # HERE IS THE MAP
@@ -12,12 +14,8 @@ grid = [[0,1,0,0],
 # WHERE DO WE WANT XAVIER TO GO?
 rows = range(len(grid))
 cols = range(len(grid[0]))
-# delta = orientation
 states = list(itertools.product(rows,cols,range(len(delta))))
 init = states[0][0:2]
-# Last cell:
-# goal = states[-1][0:2]
-# TODO: PICK RANDOMLY?
 goal = (0,2)
 
 
@@ -26,16 +24,14 @@ opt = optimum_policy(grid, goal, cost)
 # NOW WE TELL XAVIER TO GO TOWARDS THE GOAL UNLESS SOMETHING COMES IN HIS PATH
 
 # for json
-# add goal here
 map_arr = []
 for r in range(len(grid)):
   for c in range(len(grid[0])):
       map_arr.append([r,c,opt[r][c]])
 
-import json
-with open('map.json', 'w') as outfile:
+# MAKE SURE YOU ARE IN THE RIGHT DIRECTORY
+with open('site/public/js/map.json', 'w') as outfile:
     json.dump(map_arr, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
-
 
 # generate the transition matrix
 # for every state in states
@@ -77,13 +73,13 @@ for state in states:
   for missing_delta in missing_deltas:
     emit_p[state][missing_delta] = 0.0
 
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(trans_p)
+
 trans_p_json = {}
 for k,v in trans_p.iteritems():
   val = {str(k1): v1 for k1, v1 in trans_p[k].iteritems()}
   trans_p_json[str(k)] = val
 
-print(trans_p_json)
-
-import json
-with open('transitions_matrix.json', 'w') as outfile:
+with open('site/public/js/transitions_matrix.json', 'w') as outfile:
     json.dump(trans_p_json, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
